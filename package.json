@@ -5,7 +5,7 @@
   "main": "break.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "app":"nodemon break.js"
+    "app": "nodemon break.js"
   },
   "repository": {
     "type": "git",
