@@ -1,0 +1,98 @@
+var user = require("../models/UserModel.js");
+const bcrypt = require("bcrypt");
+var jwt = require("jsonwebtoken");
+
+function registrationValidation(req,res,next){
+    if(req.file === undefined|null){
+        res.status(500);
+        res.json({
+        status:500,
+        messsage:"Profile image cannot be empty"
+            });
+            
+    }
+    if(req.body.username === null)
+    {
+        res.send("Username cannot be empty");
+    }
+    if(req.body.password === null)
+    {
+        res.send("Password cannot be empty");
+    }
+    if(req.body.gender === null)
+    {
+        res.send("Gender cannot be empty");
+    }
+    if(req.body.cPassword === null)
+    {
+        res.send("Please comform password");
+    }
+    if(req.body.cPassword !== req.body.password)
+    {
+        res.send("Password does not match");
+    }
+    if(req.body.address === null)
+    {
+        res.send("Address cannot be empty");
+    }
+    if(req.body.phone === null)
+    {
+        res.send("PhoneNumber cannot be empty");
+    }
+    if(req.body.email === null)
+    {
+        res.send("Email cannot be empty");
+    }
+    user.findOne({
+    where:{phone:req.body.phone}
+    })
+    .then(function(result){
+    if(result=== null){
+        next();
+    }
+    else{
+        res.status(303);
+        res.json({
+            status:303,
+            messsage:"User already exist"
+        });
+    }
+    
+    })
+    .catch(function(err){
+        console.log(err);
+    });
+    }
+    
+    function hashPassword(req,res,next){
+        const saltRounds = 10;
+        bcrypt.hash(req.body.password, saltRounds).then(function(hash) {
+            // Store hash in your password DB.
+            req.hashedPassword=hash;
+            next();
+        }).catch(function(err){
+            next("Hassing error");
+        });
+    }
+
+    function registerUser(req,res,next){
+        user.create({
+            username:req.body.username,
+            phone:req.body.phone,
+            email:req.body.email,
+            address:req.body.address,
+            gender:req.body.gender,
+            password:req.hashedPassword,
+            profileImage:req.file.filename
+        })
+        .then(function(result){
+        res.json({
+            status:201,
+            messsage:"User is Registered"
+        });
+        })
+        .catch(function(err){
+            next(err);
+        });
+        }
+        module.exports={registerUser,registrationValidation,hashPassword};
