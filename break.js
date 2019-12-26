@@ -5,7 +5,7 @@ var registrationController = require("./controllers/registrationController.js");
 var loginController = require("./controllers/loginController.js");
 require("dotenv").config();
 var app = express();
-
+app.use(bodyParser.json('application/json'));
 
 var multer  = require("multer");
 var storage = multer.diskStorage(
@@ -21,9 +21,8 @@ var storage = multer.diskStorage(
 var upload = multer( { storage: storage } );
 
 app.post('/v1/register',upload.single("profileImage"),registrationController.registrationValidation,registrationController.hashPassword,registrationController.registerUser);
-app.use(bodyParser.urlencoded({extended:true}));
-app.post("/v1/login",loginController.loginValidator,loginController.chkLogin,loginController.jwtTokenGen,loginController.login);
 
+app.post("/api/v1/users/signin",loginController.loginValidator,loginController.chkLogin,loginController.jwtTokenGen,loginController.login);
 
 
 //error handling middleware first parm err
