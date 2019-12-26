@@ -3,17 +3,14 @@ const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 
 function registrationValidation(req,res,next){
-    if(req.file === undefined|null){
-        res.status(500);
-        res.json({
-        status:500,
-        messsage:"Profile image cannot be empty"
-            });
-            
-    }
+   
     if(req.body.username === null)
     {
         res.send("Username cannot be empty");
+    }
+    if(req.body.profileImage === null)
+    {
+        res.send("Image cannot be empty");
     }
     if(req.body.password === null)
     {
@@ -83,7 +80,7 @@ function registrationValidation(req,res,next){
             address:req.body.address,
             gender:req.body.gender,
             password:req.hashedPassword,
-            profileImage:req.file.filename
+            profileImage:req.body.profileImage
         })
         .then(function(result){
         res.json({
