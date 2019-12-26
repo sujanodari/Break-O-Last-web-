@@ -1,9 +1,11 @@
 "use strict";
 var express = require("express");
+var bodyParser = require("body-parser");
 var registrationController = require("./controllers/registrationController.js");
+var loginController = require("./controllers/loginController.js");
 require("dotenv").config();
 var app = express();
-
+app.use(bodyParser.json('application/json'));
 
 var multer  = require("multer");
 var storage = multer.diskStorage(
@@ -17,6 +19,7 @@ var storage = multer.diskStorage(
 );
 //multer is used to upload the file
 var upload = multer( { storage: storage } );
+
 app.post('/api/v1/users/profile',upload.single("profileImage"),function(req,res){
     if(req.file === undefined|null){
         res.status(500);
@@ -35,6 +38,10 @@ app.post('/api/v1/users/profile',upload.single("profileImage"),function(req,res)
     }
 });
 app.post('/api/v1/users/signup',registrationController.registrationValidation,registrationController.hashPassword,registrationController.registerUser);
+
+
+app.post("/api/v1/users/signin",loginController.loginValidator,loginController.chkLogin,loginController.jwtTokenGen,loginController.login);
+
 //error handling middleware first parm err
 app.use(function(err,req,res,next){
     res.status(500);
@@ -44,16 +51,8 @@ app.use(function(err,req,res,next){
     });
   
     });
-app.use(function(err,req,res,next){
-    res.status(500);
-    res.json({
-    status:500,
-    message:err.message
-    });
-  
-    });
 
-var multer  = require("multer");
+
 
 
 
