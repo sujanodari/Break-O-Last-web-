@@ -48,10 +48,11 @@ function registrationValidation(req,res,next){
         next();
     }
     else{
-        res.status(303);
+        res.status(409);
         res.json({
-            status:303,
-            messsage:"User already exist"
+            code:409,
+            status:"error",
+            message:"User already exist"
         });
     }
     
@@ -83,8 +84,10 @@ function registrationValidation(req,res,next){
             profileImage:req.body.profileImage
         })
         .then(function(result){
+        res.status(201);
         res.json({
-            status:201,
+            code:201,
+            status:"success",
             messsage:"User is Registered"
         });
         })
