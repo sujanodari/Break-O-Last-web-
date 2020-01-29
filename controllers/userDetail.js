@@ -64,7 +64,36 @@ user.findOne({
 }
 //call registratiocontroller hash password
 function updatePassword(req,res,next){
-    req.hashedPassword=hash;
+const usertoken = req.headers.authorization;
+const token = usertoken.split(' ');
+const decoded = jwt.verify(token[1], 'thisIsSecreatKey');
+
+    user.update({
+        password:req.hashedPassword
+},{
+    where:{
+        phone:decoded.username
+    }
+},).then(function(result){
+    if(result===0){
+        res.status(404);
+        res.json({
+            code:404,
+            status:"error",
+            message: 'User not found'
+          }); 
+    }else
+    {
+        res.status(200);
+        res.json({
+            code:200,
+            status:"success",
+            message: 'User Updated'
+          });
+    }
+}).catch(function(err){
+    next(err);
+});
 
 }
 function phoneValidation(req,res,next){
@@ -94,10 +123,15 @@ function updatePhone(req,res,next){
    
 
 }
-
+function passwordValidation(req,res,next){
+    if(req.body.password===null){
+        res.send("password cannot be null");
+    }
+    next();
+}
 function updateUserDetail(req,res,next){
     //phone is unique and password cannot be updated
 
 }
-module.exports={verifyToken,updatePhone,updatePassword,getUser,updateUserDetail,phoneValidation};
+module.exports={verifyToken,updatePhone,updatePassword,passwordValidation,getUser,updateUserDetail,phoneValidation};
 

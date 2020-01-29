@@ -46,6 +46,9 @@ app.post("/api/v1/users/signin",loginController.loginValidator,loginController.c
 
 app.get("/api/v1/users/detail",userDetail.verifyToken,userDetail.getUser);
 
+app.put("/api/v1/users/update/password",userDetail.verifyToken,userDetail.passwordValidation,registrationController.hashPassword,userDetail.updatePassword);
+
+
 //error handling middleware first parm err
 app.use(function(err,req,res,next){
     res.status(500);
