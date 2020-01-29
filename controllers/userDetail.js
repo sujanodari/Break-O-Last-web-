@@ -2,9 +2,64 @@ var user = require("../models/UserModel.js");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 function verifyToken(req,res,next){
+    token=req.headers.authorization;
+    if(token===null||undefined){
+        res.json({status:400,message:'Token is not Provided'});
+        return  res.status(400);
+    }
+    if (token.startsWith('Bearer ')) {
+       // Remove Bearer from string
+  token = token.slice(7, token.length).trimLeft();
+} 
+if (token) {
+    jwt.verify(token,'thisIsSecreatKey',function(err,result){
 
+        if (err) {
+            req.status(403);
+            res.json({
+                code:403,
+                status:"unauthorized",
+                message: 'Token is not authorized'
+              });
+            res.status(403);
+            
+          } else {
+            req.result = result;
+            next();
+          }    
+    });
+    
+ } 
 }
 function getUser(req,res,next){
+const usertoken = req.headers.authorization;
+const token = usertoken.split(' ');
+const decoded = jwt.verify(token[1], 'thisIsSecreatKey');
+user.findOne({
+    where:{phone:decoded.username}
+    })
+    .then(function(result){
+    if(result=== null){
+        next(err);
+    }
+    else{
+        res.status(200);
+        res.json({
+            code:200,
+            status:"success",
+            username:result.dataValues.username,
+            phone:result.dataValues.phone,
+            address:result.dataValues.address,
+            email:result.dataValues.email,
+            gender:result.dataValues.gender,
+            profileImage:result.dataValues.profileImage
+        });
+    }
+    
+    })
+    .catch(function(err){
+        console.log(err);
+    });
 
 }
 //call registratiocontroller hash password
@@ -44,6 +99,5 @@ function updateUserDetail(req,res,next){
     //phone is unique and password cannot be updated
 
 }
-module.exports={verifyToken,updatePhone,updatePassword,getUser,updateUserDetail,
-    users,phoneValidation};
+module.exports={verifyToken,updatePhone,updatePassword,getUser,updateUserDetail,phoneValidation};
 

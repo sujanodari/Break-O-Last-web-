@@ -2,7 +2,6 @@
         const bcrypt = require("bcrypt");
         var jwt = require("jsonwebtoken");
         function loginValidator(req,res,next){
-    
             if(req.body.phone===null){
                 res.send("Phone Number cannot be null");
             }
@@ -58,8 +57,10 @@
         function login(req,res,next){
            // console.log(req.token);
             if(req.token !== null){
+                
+	    res.status(202);
             res.json({
-                status:202,
+                status:"Success",
                 usertoken:req.token});
             }
         }
