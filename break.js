@@ -3,6 +3,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var registrationController = require("./controllers/registrationController.js");
 var loginController = require("./controllers/loginController.js");
+var userDetail = require("./controllers/userDetail.js");
 require("dotenv").config();
 var app = express();
 app.use(bodyParser.json('application/json'));
@@ -42,6 +43,8 @@ app.post('/api/v1/users/signup',registrationController.registrationValidation,re
 
 
 app.post("/api/v1/users/signin",loginController.loginValidator,loginController.chkLogin,loginController.jwtTokenGen,loginController.login);
+
+app.get("/api/v1/users/detail",userDetail.verifyToken,userDetail.getUser);
 
 //error handling middleware first parm err
 app.use(function(err,req,res,next){
