@@ -3,6 +3,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var registrationController = require("./controllers/registrationController.js");
 var loginController = require("./controllers/loginController.js");
+var hotelController = require("./controllers/hotelController.js");
 var userDetail = require("./controllers/userDetail.js");
 require("dotenv").config();
 var app = express();
@@ -48,6 +49,15 @@ app.get("/api/v1/users/detail",userDetail.verifyToken,userDetail.getUser);
 
 app.put("/api/v1/users/update/password",userDetail.verifyToken,userDetail.passwordValidation,registrationController.hashPassword,userDetail.updatePassword);
 
+app.post('/api/v1/hotel/room',hotelController.roomValidation,hotelController.addHotel);
+
+app.get('/api/v1/hotel/rooms',hotelController.getRooms);
+
+app.post('/api/v1/hotel/room/book',hotelController.bookValidation,hotelController.bookRoom);
+
+app.get('/api/v1/hotel/rooms/book',userDetail.verifyToken,hotelController.getUserId,hotelController.getBook);
+
+app.delete('/api/v1/hotel/rooms/book/delete/:id',userDetail.verifyToken,hotelController.deleteBook);
 
 //error handling middleware first parm err
 app.use(function(err,req,res,next){
