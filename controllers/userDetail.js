@@ -133,5 +133,41 @@ function updateUserDetail(req,res,next){
     //phone is unique and password cannot be updated
 
 }
-module.exports={verifyToken,updatePhone,updatePassword,passwordValidation,getUser,updateUserDetail,phoneValidation};
+//call registratiocontroller hash password
+function forgetPassword(req,res,next){
+        
+    if(req.body.phone===null){
+        res.send("phone number cannot be null");
+    }
+     user.update({
+            password:req.hashedPassword
+    },{
+        where:{
+            phone:req.body.phone
+        }
+    },).then(function(result){
+        if(result===0){
+            res.status(404);
+            res.json({
+                code:404,
+                status:"error",
+                message: 'User not found'
+              }); 
+        }else
+        {
+            res.status(200);
+            res.json({
+                code:200,
+                status:"success",
+                message: 'Password Updated'
+              });
+        }
+    }).catch(function(err){
+        next(err);
+    });
+    
+    }
+
+
+module.exports={forgetPassword,verifyToken,updatePhone,updatePassword,passwordValidation,getUser,updateUserDetail,phoneValidation};
 

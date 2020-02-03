@@ -59,6 +59,8 @@ app.get('/api/v1/hotel/rooms/book',userDetail.verifyToken,hotelController.getUse
 
 app.delete('/api/v1/hotel/rooms/book/delete/:id',userDetail.verifyToken,hotelController.deleteBook);
 
+app.put("/api/v1/users/update/forget/password",userDetail.passwordValidation,registrationController.hashPassword,userDetail.forgetPassword);
+
 //error handling middleware first parm err
 app.use(function(err,req,res,next){
     res.status(500);
