@@ -91,8 +91,6 @@ hotel.hotel.findAll().then(function(result){
     else{
         res.status(200);
         res.json({
-            code:200,
-            status:"success",
             data:result
         });
     }
