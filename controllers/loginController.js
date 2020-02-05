@@ -13,7 +13,11 @@
             })
             .then(function(result){
                 if(result===null){
-                    res.send("You have not registered, please register first");
+                    res.status(204);
+                    res.json({
+                    status:"Unsuccessfull",
+                    code:"204",
+                    message:"You have not registered, please register first"}); 
                 }
                 else{
                     //console.log(result);
