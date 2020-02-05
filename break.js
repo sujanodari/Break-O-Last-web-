@@ -53,7 +53,7 @@ app.post('/api/v1/hotel/room',hotelController.roomValidation,hotelController.add
 
 app.get('/api/v1/hotel/rooms',hotelController.getRooms);
 
-app.post('/api/v1/hotel/room/book',hotelController.bookValidation,hotelController.bookRoom);
+app.post('/api/v1/hotel/room/book',userDetail.verifyToken,hotelController.getUserId,hotelController.bookValidation,hotelController.bookRoom);
 
 app.get('/api/v1/hotel/rooms/book',userDetail.verifyToken,hotelController.getUserId,hotelController.getBook);
 

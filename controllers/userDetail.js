@@ -15,7 +15,7 @@ if (token) {
     jwt.verify(token,'thisIsSecreatKey',function(err,result){
 
         if (err) {
-            req.status(403);
+            res.status(403);
             res.json({
                 code:403,
                 status:"unauthorized",
