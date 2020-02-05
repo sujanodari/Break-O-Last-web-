@@ -61,6 +61,8 @@ app.delete('/api/v1/hotel/rooms/book/delete/:id',userDetail.verifyToken,hotelCon
 
 app.put("/api/v1/users/update/forget/password",userDetail.passwordValidation,registrationController.hashPassword,userDetail.forgetPassword);
 
+app.delete('/api/v1/users/delete/user',userDetail.verifyToken,userDetail.deleteUser);
+
 //error handling middleware first parm err
 app.use(function(err,req,res,next){
     res.status(500);

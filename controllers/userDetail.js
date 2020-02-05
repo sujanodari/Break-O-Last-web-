@@ -134,6 +134,30 @@ function updateUserDetail(req,res,next){
 
 }
 //call registratiocontroller hash password
+function deleteUser(req,res,next){
+    const usertoken = req.headers.authorization;
+    const token = usertoken.split(' ');
+    const decoded = jwt.verify(token[1], 'thisIsSecreatKey');
+    user.destroy({
+        where:{phone:decoded.username}
+        }).then(function(result){
+        if(result=== null){
+            next(err);
+        }
+        else{
+            res.status(200);
+            res.json({
+                code:200,
+                status:"success",
+                data:result
+            });
+        }
+        
+        })
+        .catch(function(err){
+            console.log(err);
+        });
+    }
 function forgetPassword(req,res,next){
         
     if(req.body.phone===null){
@@ -169,5 +193,5 @@ function forgetPassword(req,res,next){
     }
 
 
-module.exports={forgetPassword,verifyToken,updatePhone,updatePassword,passwordValidation,getUser,updateUserDetail,phoneValidation};
+module.exports={forgetPassword,verifyToken,updatePhone,updatePassword,passwordValidation,getUser,updateUserDetail,phoneValidation,deleteUser};
 
