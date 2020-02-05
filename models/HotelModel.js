@@ -68,7 +68,7 @@ var booking=db.sequelize.define("Book",{
         allowNull:false
     },
     Date:{
-        type:db.Sequelize.DATEONLY,
+        type:db.Sequelize.TEXT,
         allowNull:false
     }
 },{

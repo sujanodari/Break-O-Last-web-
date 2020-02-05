@@ -103,10 +103,6 @@ hotel.hotel.findAll().then(function(result){
 }
 
 function bookValidation(req,res,next){
-    if(req.body.userId === null)
-    {
-        res.send("user Id cannot be empty");
-    }
     if(req.body.hotelId === null)
     {
         res.send("Hotel Id cannot be empty");
@@ -117,7 +113,7 @@ function bookValidation(req,res,next){
     }
     
     hotel.booking.findOne({
-        where:{userId:req.body.userId,
+        where:{userId:req.userID,
             hotelId:req.body.hotelId,
             Date:req.body.date
         }
@@ -142,10 +138,10 @@ function bookValidation(req,res,next){
 
       }
 
-
+//call userDetail.verifyToken
 function bookRoom(req,res,next){
     hotel.booking.create({
-        userId:req.body.userId,
+        userId:req.userID,
         hotelId:req.body.hotelId,
         Date:req.body.date
     })
@@ -185,15 +181,6 @@ function getUserId(req,res,next){
     }
 
 function getBook(req,res,next){
-
-    if(req.body.userId === null)
-    {
-        res.send("user Id cannot be empty");
-    }
-    if(req.body.hotelId === null)
-    {
-        res.send("Hotel Id cannot be empty");
-    }   
 hotel.booking.findAll({
     where:{userId:req.userID}
     }).then(function(result){
@@ -203,8 +190,6 @@ hotel.booking.findAll({
     else{
         res.status(200);
         res.json({
-            code:200,
-            status:"success",
             data:result
         });
     }
